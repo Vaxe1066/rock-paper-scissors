@@ -1,3 +1,5 @@
+//const { doc } = require("prettier");
+
 function computerPlay(){
     let compNumb = Math.random();
     if (compNumb <= 1/3){
@@ -76,85 +78,9 @@ function playRoundNumeric(playerSelection, computerSelection){
 
 }
 
-//User prompt function take only correct values do until cancel or correct input
-function userPrompt(){
-    let answerCheck=1;
-    let answer = prompt("Please enter, Rock, Paper or Scissors");
-    while(answerCheck==1){
-        
-        if (answer === null){
-            return;
-        }
-        else{
-            answer = propcase(answer);
-            if (answer=='Rock' || answer=='Paper' || answer=='Scissors'){
-                answerCheck=0;
-                return answer;
-            }
-            else{
-                answer = prompt("Wrong Input, Please enter, Rock, Paper or Scissors");
-                answerCheck==1;
-                continue;
-            }
-        }
-        
-
-    
-    }
-}
 
 
 
-//Main game function below
-
-function game(rounds=5, input){
-    console.log('Welcome you are about to play 5 rounds of Rock Paper Scissors with the computer');
-
-    let playerCnt = 0;
-    let compCnt=0;
-    let userInput;
-    let computer;
-    let roundOutput;
-    for(let i=0; i!=rounds; ++i){
-        console.log(`Round ${i}`);
-        userInput = input
-        computer = computerPlay();
-        console.log(playRound(userInput, computer));
-
-        roundOutput=playRoundNumeric(userInput, computer);
-        if (roundOutput==0){
-            continue;
-        }
-        else if (roundOutput==1){
-            ++compCnt;
-        }
-        else if (roundOutput==-1){
-            ++playerCnt;
-        }
-    }
-
-    console.log('Game Over');
-    if (playerCnt>=compCnt){
-        console.log(`You Won! ${playerCnt} Vs ${compCnt}`);
-    }
-    else if (layerCnt<=compCnt){
-        console.log(`You Lost! ${playerCnt} Vs ${compCnt}`);
-    }
-    else {
-        console.log(`Draw ${playerCnt} each`);
-    }
-
-}
-
-function changeDom(out){
-    const container=document.querySelector('.container');
-
-    const outputDiv = document.createElement('div');
-    outputDiv.classList.add('content');
-    outputDiv.textContent=out;
-    container.appendChild(outputDiv);
-  
-  }
 
   let clicks=0;
   function hello() {
@@ -180,20 +106,15 @@ function changeDom(out){
   };
 
 
-  function updateBox(input){
-    const container = document.querySelector('.listOutput');
-    let textAdd=document.createElement('li');
-    textAdd.classList.add('li' + input.id);
-    textAdd.textContent = playRound(input.id, computerPlay());
-    container.appendChild(textAdd);
-
-  }
 
   let outRet;
   let comptest;
   let playertest;
   let result;
-  function test(counter, input){
+
+  
+
+  function game(counter, input){
       if (counter<=5){
         let computer = computerPlay();
         result = playRound(input.id,computer);
@@ -207,7 +128,7 @@ function changeDom(out){
             console.log(playertest);
         }
       }
-      else if (counter==6){
+      else if (counter==5){
         console.log('Game Over');
         if (playertest>comptest){
             result = `You Won! ${playertest} Vs ${comptest}`;
@@ -221,14 +142,20 @@ function changeDom(out){
      
       }
     
-    return result;
+    return {
+        result: result,
+        playerScore: playertest,
+        compScore: comptest,
+    };;
 
   }
 
 
-function alertTest(playerCnt, compCnt){
+
+function execGame(playerCnt, compCnt){
     const inputs = document.querySelectorAll('input');
     const container = document.querySelector('.listOutput');
+    const youContainer = document.querySelector('.you')
 
     inputs.forEach( (input) => {
         // and for each one we add a 'click' listener
@@ -236,19 +163,45 @@ function alertTest(playerCnt, compCnt){
         counter = hello();
         //test(counter, input);
         //console.log(playRound(input.id,computerPlay()));
-        if (counter<=5){
+        if (counter<=4){
+            
             let textAdd=document.createElement('li');
             textAdd.classList.add('li' + input.id);
-            textAdd.textContent = test(counter, input);
+            let gameValues = game(counter, input);
+            textAdd.textContent = gameValues.result;
             container.appendChild(textAdd);
+            
+
+            let updatePlayer=document.querySelector('.youScore')
+            updatePlayer.textContent = gameValues.playerScore;
+
+            let updateComp=document.querySelector('.compScore')
+            updateComp.textContent = gameValues.compScore;
+
 
         }
-        else if (counter==6){
-            let textAdd=document.createElement('p');
-            textAdd.classList.add('p' + input.id);
-            textAdd.textContent = test(counter, input);
-            textAdd.setAttribute('style', 'font-size: 30px');
+        else if (counter==5){
+            let textAdd=document.createElement('li');
+            textAdd.classList.add('li' + input.id);
+            let gameValues = game(counter, input);
+            textAdd.textContent = gameValues.result;
             container.appendChild(textAdd);
+            
+
+            let updatePlayer=document.querySelector('.youScore')
+            updatePlayer.textContent = gameValues.playerScore;
+
+            let updateComp=document.querySelector('.compScore')
+            updateComp.textContent = gameValues.compScore;
+
+            //final 
+
+            let textAddF=document.createElement('p');
+            textAddF.classList.add('finalResultText');
+            let finalResult = game(counter, input);
+            textAddF.textContent = finalResult.result;
+            textAddF.setAttribute('style', 'font-size: 30px');
+            container.appendChild(textAddF);
 
             let butAdd = document.createElement('button');
             butAdd.textContent = 'Play Again';
@@ -268,7 +221,7 @@ function alertTest(playerCnt, compCnt){
 }
 
 
-alertTest(playerCnt, compCnt);
+execGame(playerCnt, compCnt);
 
 
 

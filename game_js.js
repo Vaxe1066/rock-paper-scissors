@@ -195,19 +195,30 @@ function execGame(playerCnt, compCnt){
             updateComp.textContent = gameValues.compScore;
 
             //final 
+            const containerfin  = document.querySelector('.output');
 
             let textAddF=document.createElement('p');
             textAddF.classList.add('finalResultText');
             let finalResult = game(counter, input);
             textAddF.textContent = finalResult.result;
             textAddF.setAttribute('style', 'font-size: 30px');
-            container.appendChild(textAddF);
+            containerfin.appendChild(textAddF);
+
+
+            //create div for button 
+            let divBut = document.createElement('div');
+            divBut.classList.add('divButton');
+            containerfin.appendChild(divBut);
+
+            let contDivBut = document.querySelector('.divButton');
+
 
             let butAdd = document.createElement('button');
+            butAdd.classList.add('finalButton');
             butAdd.textContent = 'Play Again';
             butAdd.onclick=function(){window.location.reload()};
             butAdd.setAttribute('style', 'margin-top: 30px'); 
-            container.appendChild(butAdd);
+            contDivBut.appendChild(butAdd);
             
 
 
